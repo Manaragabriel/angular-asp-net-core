@@ -1,0 +1,95 @@
+     
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Modal</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+      <form [formGroup]="registerForm.get('lotes')">
+          <div class="form-group">
+            <label>Nome do lote</label>
+            <input type="text" formControlName="nome_lote" class="form-control" />
+          </div>
+          <div class="form-group">
+              <label>Preço do lote</label>
+              <input type="text" formControlName="preco" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Quantidade </label>
+                <input type="text" formControlName="quantidade" class="form-control" />
+              </div>
+              <div class="form-group">
+                  <label>Inicio</label>
+                  <input type="text" formControlName="inicio" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Fim</label>
+                    <input type="text" formControlName="fim" class="form-control" />
+                  </div>
+                <button class="btn btn-primary" (click)="add_lote()">Adicionar lote</button>
+                
+        </form>
+  </div>
+</ng-template>
+
+<div>
+  <tabset>
+    <tab heading="Evento" id="tab1">
+      <form [formGroup]="registerForm">
+        <div class="form-group">
+            <label>Nome</label>
+            <input type="text" formControlName="nome" [(ngModel)]="evento.nome" class="form-control"/>
+            <div *ngIf="registerForm.get('nome').errors">Nome invalido</div>
+          </div>
+        <div class="form-group">
+          <label>Local</label>
+          <input type="text" formControlName="local" [(ngModel)]="evento.local" class="form-control"/>
+      </div>
+      <div class="form-group">
+        <label>Data</label>
+        <input type="text" formControlName="data" [(ngModel)]="evento.data"  class="form-control"/>
+    </div>
+    <div class="form-group">
+      <label>Imagem</label>
+      <input type="file" (change)="file_change($event)" formControlName="imagem" class="form-control"/>
+  </div>
+  <button class="btn btn-primary" (click)="save()">Salvar</button>
+  </form>
+    </tab>
+    <tab heading="Lotes">
+        <button type="button" class="btn btn-primary" (click)="openModal(template)">Adicionar lote</button>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Nome do lote</th>
+              <th scope="col">Preço</th>
+              <th scope="col">Quantidade</th>
+              <th scope="col">Inicio</th>
+              <th scope="col">Fim</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let lote of evento.lotes">
+            <tr>
+              <td></td>
+              <td>{{lote.nome_lote}}</td>
+              <td>{{lote.preco}}</td>  
+              <td>{{lote.quantidade}}</td>
+              <td>{{lote.inicio}}</td>
+              <td>{{lote.fim}}</td>
+              <td></td>
+            </tr>
+           
+          </tbody>
+        </table>
+    </tab>
+    <tab heading="Rede Sociais">Basic content 2</tab>
+  </tabset>
+</div>
+
+
+
+

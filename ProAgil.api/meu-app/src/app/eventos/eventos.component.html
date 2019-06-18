@@ -1,0 +1,144 @@
+<div>
+    <div class="form-group">
+        <input type="text" [(ngModel)]="busca"  />
+    </div>
+    <div class="form-group">
+        <button class="btn btn-primary">Buscar</button>
+    </div>
+  </div>
+<h3>{{busca}}</h3>
+<table class="table table-striped">
+    <thead>
+        <th>id</th>
+        <th>
+          <Button class="btn btn-primary" (click)="alterar_img()">Mostrar/Esconder Imagem</Button>
+        </th>
+        <th>Nome</th>
+        <th>Data</th>
+        <th>Local</th>
+        <th>Lote</th>
+        <th>Ação</th>
+    </thead>
+    <tbody *ngFor="let event of eventosFiltrados">
+        <tr>
+          <td>{{event.id}}</td>
+          <td>
+            <img 
+              *ngIf="mostraimg"
+              src="http://localhost:5000/resources/img/{{event.imagem}}"
+              [style.width.px]="largura"
+              [style.height.px]="altura"
+            
+            >
+          </td>
+          <td>{{event.nome}}</td>
+          <td>{{event.data}}</td>
+          <td>{{event.local}}</td>
+          <div>
+            <td *ngIf="event.lotes.length > 0">{{event.lotes[0].nome_lote}}</td>
+            <td *ngIf="!event.lotes.length">Sem lote</td>
+          </div>
+          <td>
+              <div class="btn-group">
+                <button class="btn btn-success"(click)="open_modal(template,event)" tooltip="Editar"><i class="fa fa-edit"></i></button>
+                <button class="btn btn-danger" (click)="deleta(event.id)" tooltip="Excluir"><i class="fa fa-eraser"></i></button>
+                <a tooltip="Ediçao detalhada" [routerLink]="['/eventos',event.id,'edit']"><i class="fa fa-edit"></i></a>
+              </div>
+          </td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="modal fade" bsModal #template="bs-modal" tabindex="-1" role="dialog" >
+  
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title pull-left">Modal</h4>
+            <button type="button" class="close pull-right" 
+            aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]= "form">
+              <div class="form-row">
+                <div class="form-group col-md-12">
+                  <label>Nome</label>
+                  <input type="text"  [ngClass]="{'is-invalid':form.get('nome').errors && form.get('nome').touched}" class="form-control" formControlName="nome">
+                </div>
+              </div>  
+              <div class="form-row">
+                <div class="form-group col-md-8">
+                  <label>Local</label>
+                  <input type="text" [ngClass]="{
+                    'is-invalid': form.get('local').errors && form.get('local').touched
+                  }" class="form-control" formControlName="local">
+                </div>
+                <div class="form-group col-md-4">
+                  <label>Data e Hora</label>
+                  <input [bsConfig]="{'dateInputFormat': 'DD/MM/YYYY hh:mm'}" type="text" bsDatepicker [ngClass]="{
+                    'is-invalid': form.get('data').errors && form.get('data').touched
+                  }" class="form-control" formControlName="data">
+                </div>
+              </div>  
+              <div class="form-row">
+                
+                <div class="form-group col-md-9">
+                  <label>Imagem</label>
+                  <input (change)="fileChange($event)" type="file" class="form-control" formControlName="imagem">
+                </div>
+              </div>  
+          
+            </form>
+            <br>
+            <button class="btn btn-secondary" (click)="openModal(template)">
+              Fechar
+            </button>
+            <button class="btn btn-primary"  (click)="editar()">
+              Salvar Alterações
+            </button>
+            <br>
+            <br>
+          </div>
+    </div>
+  </div>
+
+
+</div>
+
+<form [formGroup]= "form">
+  <div class="form-row">
+    <div class="form-group col-md-12">
+      <label>Nome</label>
+      <input type="text"  [ngClass]="{'is-invalid':form.get('nome').errors && form.get('nome').touched}" class="form-control" formControlName="nome">
+    </div>
+  </div>  
+  <div class="form-row">
+    <div class="form-group col-md-8">
+      <label>Local</label>
+      <input type="text" [ngClass]="{
+        'is-invalid': form.get('local').errors && form.get('local').touched
+      }" class="form-control" formControlName="local">
+    </div>
+    <div class="form-group col-md-4">
+      <label>Data e Hora</label>
+      <input [bsConfig]="{'dateInputFormat': 'DD/MM/YYYY hh:mm'}" type="text" bsDatepicker [ngClass]="{
+        'is-invalid': form.get('data').errors && form.get('data').touched
+      }" class="form-control" formControlName="data">
+    </div>
+  </div>  
+  <div class="form-row">
+    
+    <div class="form-group col-md-9">
+      <label>Imagem</label>
+      <input (change)="fileChange($event)" type="file" class="form-control" formControlName="imagem">
+    </div>
+  </div>  
+
+</form>
+<br>
+
+<button class="btn btn-primary" [disabled]="form.invalid" (click)="salvarAlteracao()">
+  Salvar Alterações
+</button>
